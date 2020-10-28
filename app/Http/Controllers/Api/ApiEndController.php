@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ChildCategoryResource;
 use App\Http\Resources\SliderResource;
+use App\Product;
 use App\Slider;
 use App\User;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class ApiEndController extends Controller
     }
 
     public function categories(){
-        $category = Category::where('parent_id',null)->with('child')->get();
+        $category = Category::where('parent_id',0)->with('child')->get();
         return CategoryResource::collection($category);
     }
 
@@ -34,8 +35,16 @@ class ApiEndController extends Controller
 //        return $category;
         return ChildCategoryResource::collection($category);
     }
-    public function single_category($id){
 
+    /*some products for trending*/
+    public function homeProduct(){
+      $product = Product::where('status','on')->paginate();
+      return $product;
+    }
+
+    public function single_category($id){
+        $category = Category::where('id',$id)->first();
+        return $category;
     }
 
     /**
@@ -103,15 +112,13 @@ class ApiEndController extends Controller
 
     }
 
-
+    /**/
     public function logout()
     {
         $user = Auth::user()->token();
         $user->revoke();
         return response(['message' => 'Logout successfully']);
     }
-
-    // User Auth:END
 
     /*change password*/
     public function changePassword(Request $request)
@@ -144,7 +151,6 @@ class ApiEndController extends Controller
         return $demo;
 
     }
-
 
     /*update image*/
     public function updateImage(Request $request)

@@ -24,6 +24,10 @@ Route::get('categories','Api\ApiEndController@categories');
 
 Route::get('trending/category','Api\ApiEndController@trendingCategories');
 
+Route::get('home/product','Api\ApiEndController@homeProduct');
+
+Route::get('category/product','Api\ApiEndController@singleCategoryProduct');
+
 /*registration customer*/
 Route::post('/register', 'Api\ApiEndController@register');
 /*login customer*/

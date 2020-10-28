@@ -17,7 +17,7 @@ class ChildCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' =>$this->image == null ? asset('public/cat.png') : asset('public'.$this->image)
+            'image' =>$this->image == null ? asset('cat.png') : asset($this->image)
         ];
     }
 }
