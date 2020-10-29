@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Category;
+use App\CategoryProduct;
 use App\Demo;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ChildCategoryResource;
+use App\Http\Resources\ProductResource;
 use App\Http\Resources\SliderResource;
 use App\Product;
 use App\Slider;
@@ -38,13 +40,24 @@ class ApiEndController extends Controller
 
     /*some products for trending*/
     public function homeProduct(){
-      $product = Product::where('status','on')->paginate();
-      return $product;
+      $product = Product::where('status','on')->get()->shuffle()->take(10);
+      return ProductResource::collection($product);
     }
 
+    /*category ways product*/
     public function single_category($id){
-        $category = Category::where('id',$id)->first();
-        return $category;
+        $category = CategoryProduct::where('category_id',$id)->with('products')->get();
+        $products =collect();
+        foreach ($category as $c){
+            $products->push($c->products);
+        }
+        return ProductResource::collection($products);
+    }
+
+    /*search product*/
+    public function searchProduct($name){
+        $product = Product::where('name', 'LIKE', '%' . $name . '%')->get();
+        return ProductResource::collection($product);
     }
 
     /**

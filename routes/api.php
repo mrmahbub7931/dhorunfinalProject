@@ -24,7 +24,12 @@ Route::get('categories','Api\ApiEndController@categories');
 
 Route::get('trending/category','Api\ApiEndController@trendingCategories');
 
+/*trend product*/
 Route::get('home/product','Api\ApiEndController@homeProduct');
+/*category ways product*/
+Route::get('single/category/{id}','Api\ApiEndController@single_category');
+/*search product*/
+Route::get('search/product/{name}','Api\ApiEndController@searchProduct');
 
 Route::get('category/product','Api\ApiEndController@singleCategoryProduct');
 
