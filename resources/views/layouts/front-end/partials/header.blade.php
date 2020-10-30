@@ -343,7 +343,7 @@
                                                     <p>{{$cart['qty']}} x <span>&#2547; {{$cart['item']['sales_price']}} </span></p>    
                                                 </div>
                                                 <div class="cart_remove">
-                                                    <a href="{{route('frontend.cart.remove',$product['item']['slug'])}}"><i class="icon-x"></i></a>
+                                                    <a href="{{route('frontend.cart.remove',$cart['item']['slug'])}}"><i class="icon-x"></i></a>
                                                 </div>
                                             </div>
                                             @endforeach
@@ -381,7 +381,6 @@
                 </div>
             </div>
         </div>
-
         <div class="header_bottom sticky-header">
             <div class="container">  
                 <div class="row align-items-center">

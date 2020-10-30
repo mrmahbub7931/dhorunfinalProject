@@ -21,6 +21,9 @@
                     <li><a href="{{route('products.create')}}"><i class="fa fa-circle"></i>Add Product</a></li>
                 </ul>
             </li>
+            <li>
+                <a class="sidebar-header" href="{{route('admin.orderarea.index')}}"><i data-feather="box"></i> <span>Order Area</span></a>
+            </li>
             @endcan
             <li><a class="sidebar-header" href="#"><i data-feather="dollar-sign"></i><span>Sales</span><i class="fa fa-angle-right pull-right"></i></a>
                 <ul class="sidebar-submenu">

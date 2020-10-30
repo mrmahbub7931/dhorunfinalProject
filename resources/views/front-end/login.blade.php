@@ -31,9 +31,16 @@
             <div class="row">
                <!--login area start-->
                 <div class="col-lg-6 col-md-6">
+                    @if ($message = Session::get('error'))
+                        <div class="alert alert-danger alert-block">
+                            <button type="button" class="close" data-dismiss="alert">×</button>	
+                                <strong>{{ $message }}</strong>
+                        </div>
+                    @endif
                     <div class="account_form">
                         <h2>login</h2>
-                        <form action="#">
+                        <form action="{{ route('frontend.user.login') }}" method="POST">
+                            @csrf
                             <p>   
                                 <label for="phone_number">Phone number <span>*</span></label>
                                 <input type="text" name="phone_number" id="phone_number">

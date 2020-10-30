@@ -111,7 +111,6 @@
                                     <label>quantity</label>
                                     <input min="1" max="100" placeholder="1" type="number" name="quantity">
                                     <button class="button" type="submit">add to cart</button>
-                                    {{-- <a class="button" href="{{route('frontend.product.addToCart',$product['slug'])}}">add to cart</a>   --}}
                                     
                                 </div>
                             </form>
@@ -122,12 +121,11 @@
                                    <li><a href="#" title="Add to wishlist">+ Compare</a></li>
                                </ul>
                             </div> --}}
-                            {{-- {{ dd($product->categories) }} --}}
-                            {{-- <div class="product_meta">
+                            <div class="product_meta">
                                 <span>Category: @foreach ($product->categories as $category)
                                     
                                 <a href="{{$category['slug']}}">{{$category['name']}}</a>@endforeach</span>
-                            </div> --}}
+                            </div>
                             
                         {{-- </form> --}}
                         <div class="priduct_social">

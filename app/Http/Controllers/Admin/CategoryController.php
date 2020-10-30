@@ -14,6 +14,10 @@ use App\Http\Requests\Category\CategoryRequest;
 
 class CategoryController extends Controller
 {
+    public function orderEdit(Request $request)
+    {
+        return $request->all();
+    }
     // view index file
     public function index()
     {

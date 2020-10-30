@@ -16,9 +16,9 @@ class ProductController extends Controller
 {
     public function products($slug)
     {
+        $product = Product::where('slug', $slug)->first();
         $categories = Category::all();
-        $product = DB::table('products')->where('slug', $slug)->first();
-        
+        // $product = DB::table('products')->where('slug', $slug)->first();
         return view('front-end.product-details',compact('categories','product'));
     }
 
