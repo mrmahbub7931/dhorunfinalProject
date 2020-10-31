@@ -9971,6 +9971,29 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 
 /*blog details css end*/
 /*  24. modal css here */
+.modal-content button.close {
+  position: absolute;
+  left: 93%;
+  width: 35px;
+  height: 35px;
+  line-height: 37px;
+  display: block;
+  border: 1px solid #e1e1e1;
+  top: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 9;
+}
+.modal-content button.close > span {
+  text-align: center;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
 .modal-dialog.modal-dialog-centered {
   min-width: 1100px;
 }

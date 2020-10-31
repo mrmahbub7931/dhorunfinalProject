@@ -56,7 +56,7 @@ class UserController extends Controller
             ]);
         }
 
-        // $data = $request->all();
+        $data = $request->all();
         try {
             $user = User::create($data);
             

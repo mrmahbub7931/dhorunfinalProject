@@ -32,9 +32,9 @@ Route::group([ 'as' => 'admin.','middleware' => ['auth'] ],function (){
         Route::post('category', 'CategoryController@store')->name('category.store');
         Route::get('category/edit/{id}', 'CategoryController@edit')->name('category.edit');
         Route::put('category/update/{id}', 'CategoryController@update')->name('category.update');
-        Route::delete('category/delete/{id}', 'CategoryController@destroy')->name('category.delete');
         Route::resources([
-            'products' => 'ProductController'
+            'products' => 'ProductController',
+            'orderarea' => 'OrderAreaController'
         ]);
     }); 
 });
@@ -46,19 +46,11 @@ Route::group(['namespace' => 'Admin'], function () {
 //     Route::Resource('/category','CategoryController');
 // });
 
-// web registration customer
-
-// Route::post('/web/login', 'UserController@login');
-// Route::post('/web/register','UserController@store');
-// Route::get('/web/users','UserController@index');
-// Route::get('/web/logout', 'UserController@logout');
-
 /**
  * Front end route
  */
 
  Route::group(['as' => 'frontend.','namespace' => 'frontend'], function () {
-
      Route::get('/', 'IndexController@index')->name('index');
      Route::get('/cart', 'ProductController@cartPage')->name('cart.index');
      Route::get('/{slug}', 'ProductController@products')->name('product-details');
@@ -68,6 +60,8 @@ Route::group(['namespace' => 'Admin'], function () {
      Route::get('user/login','UserLoginController@index')->name('login.index');
      Route::post('user/login','UserLoginController@login')->name('user.login');
      Route::post('user/register','UserLoginController@register')->name('user.register');
-     Route::get('user/account','UserLoginController@account')->name('user.account');
-
+     Route::get('user/account','UserLoginController@userAccount')->name('user.account');
+     Route::get('user/logout','UserLoginController@userAccount')->name('user.logout');
+     Route::put('user/account/{id}','UserLoginController@userDetails')->name('user.details');
  });
+

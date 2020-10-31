@@ -31,6 +31,12 @@
                 <div class="account_dashboard">
                     <div class="row">
                         <div class="col-sm-12 col-md-3 col-lg-3">
+                            @if ($message = Session::get('success'))
+                            <div class="alert alert-success alert-block">
+                                <button type="button" class="close" data-dismiss="alert">×</button>	
+                                    <strong>{{ $message }}</strong>
+                            </div>
+                            @endif
                             <!-- Nav tabs -->
                             <div class="dashboard_tab_button">
                                 <ul role="tablist" class="nav flex-column dashboard-list">
@@ -39,7 +45,13 @@
                                     <li><a href="#downloads" data-toggle="tab" class="nav-link">Downloads</a></li>
                                     <li><a href="#address" data-toggle="tab" class="nav-link">Addresses</a></li>
                                     <li><a href="#account-details" data-toggle="tab" class="nav-link">Account details</a></li>
-                                    <li><a href="login.html" class="nav-link">logout</a></li>
+                                    {{-- <li><a href="login.html" class="nav-link">logout</a></li> --}}
+                                    <li><a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();">Logout</a>
+                                    </li>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
                                 </ul>
                             </div>    
                         </div>
@@ -114,52 +126,41 @@
                                 <div class="tab-pane" id="address">
                                    <p>The following addresses will be used on the checkout page by default.</p>
                                     <h4 class="billing-address">Billing address</h4>
-                                    <a href="#" class="view">Edit</a>
-                                    <p><strong>Bobby Jackson</strong></p>
+                                    
+                                    <p><strong>{{Auth::user()->name}}</strong></p>
                                     <address>
-                                        House #15<br>
-                                        Road #1<br>
-                                        Block #C <br>
-                                        Banasree <br>
-                                        Dhaka <br>
-                                        1212
+                                        @if (Auth::user()->address === NULL)
+                                            <p>Billing address is Empty.</p>
+                                            @else
+                                            {{ Auth::user()->address }}
+                                        @endif
                                     </address>
-                                    <p>Bangladesh</p>   
+                                    <p>Bangladesh</p>
                                 </div>
                                 <div class="tab-pane fade" id="account-details">
                                     <h3>Account details </h3>
                                     <div class="login">
                                         <div class="login_form_container">
                                             <div class="account_login_form">
-                                                <form action="#">
-                                                    <p>Already have an account? <a href="#">Log in instead!</a></p>
-                                                    <div class="input-radio">
-                                                        <span class="custom-radio"><input type="radio" value="1" name="id_gender"> Mr.</span>
-                                                        <span class="custom-radio"><input type="radio" value="1" name="id_gender"> Mrs.</span>
-                                                    </div> <br>
-                                                    <label>First Name</label>
-                                                    <input type="text" name="first-name">
-                                                    <label>Last Name</label>
-                                                    <input type="text" name="last-name">
-                                                    <label>Email</label>
-                                                    <input type="text" name="email-name">
-                                                    <label>Password</label>
-                                                    <input type="password" name="user-password">
-                                                    <label>Birthdate</label>
-                                                    <input type="text" placeholder="MM/DD/YYYY" value="" name="birthday">
-                                                    <span class="example">
-                                                      (E.g.: 05/31/1970)
-                                                    </span>
-                                                    <br>
-                                                    <span class="custom_checkbox">
-                                                        <input type="checkbox" value="1" name="optin">
-                                                        <label>Receive offers from our partners</label>
-                                                    </span>
-                                                    <br>
-                                                    <span class="custom_checkbox">
-                                                        <input type="checkbox" value="1" name="newsletter">
-                                                        <label>Sign up for our newsletter<br><em>You may unsubscribe at any moment. For that purpose, please find our contact info in the legal notice.</em></label>
-                                                    </span>
+                                                <form action="{{route('frontend.user.details',Auth::user()->id)}}" method="POST" id="userDetails">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="currentUserId" id="currentUserId" value="{{Auth::user()->id}}">
+                                                    <label>FUll Name</label>
+                                                    <input type="text" name="name" value="{{ Auth::user()->name }}">
+                                                    <label>Phone number</label>
+                                                    <input type="text" name="phone_number" value="{{ Auth::user()->phone_number }}">
+                                                    <h4 class="billing-address">Billing address</h4>
+                                                    <label for="address" class="mb-1">Customer Address</label>
+                                                            <textarea class="form-control" name="address" id="address" placeholder="Address">@if(Auth::user()->address !== NULL){{ Auth::user()->address }}@endif</textarea>
+                                                    
+                                                    <a href="javascript:void(0)" class="righ_0" data-toggle="collapse" data-target="#chngpassword" aria-controls="collapseOne" style="margin-top: 10px;display:block">Change Password</a>
+                                                    <div id="chngpassword" class="collapse one" data-parent="#accordion">
+                                                        <label for="old_password" class="col-form-label">Old Password:</label>
+                                <input type="password" id="old_password" name="old_password" placeholder="password">
+                                <label for="password" class="col-form-label">New Password:</label>
+                                <input id="password" type="password" name="password" autocomplete="current-password" placeholder="Password">
+                                                    </div>
                                                     <div class="save_button primary_btn default_button">
                                                        <button type="submit">Save</button>
                                                     </div>
@@ -178,7 +179,25 @@
 @endsection
 
 @push('js')
-    
+    <script type="text/javascript">
+        $(document).ready(function(){
+            
+            $('#userDetails').on('submit',function (e) {
+                e.preventDefault();
+                var id = $('#currentUserId').val();
+                
+                $.ajax({
+                    type: "PUT",
+                    url: "/user/account/"+id,
+                    data: $('#userDetails').serialize(),
+                    success: function (response) {
+                        location.reload();
+                    }
+                });
+            });
+
+        });
+    </script>
 @endpush
     
     
