@@ -30,6 +30,8 @@ Route::get('home/product','Api\ApiEndController@homeProduct');
 Route::get('single/category/{id}','Api\ApiEndController@single_category');
 /*search product*/
 Route::get('search/product/{name}','Api\ApiEndController@searchProduct');
+/*wishlist*/
+Route::post('wishlist','Api\ApiEndController@wishlist');
 
 Route::get('category/product','Api\ApiEndController@singleCategoryProduct');
 

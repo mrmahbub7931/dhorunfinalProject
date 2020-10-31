@@ -56,7 +56,35 @@ class ApiEndController extends Controller
 
     /*search product*/
     public function searchProduct($name){
-        $product = Product::where('name', 'LIKE', '%' . $name . '%')->get();
+//        return $name;
+        $product = Product::where('status','on')->where('name', 'LIKE', '%' . $name . '%')->get()->take(20);
+        if ($product->count() <= 0){
+            $product = Product::where('status','on')->get()->shuffle()->take(10);
+        }
+        return ProductResource::collection($product);
+    }
+
+
+    /*wishlist*/
+    public function wishlist(Request $request)
+    {
+        $datas = json_decode($request->wishlists);
+        $product = collect();
+        foreach ($datas as $p) {
+            $pro = Product::where('status','on')->where('id', $p)->first();
+            if ($pro != null) {
+                $demo = new Demo();
+                $demo->id = $pro->id;
+                $demo->name = $pro->name;
+                $demo->image = $pro->image;
+                $demo->stock = $pro->stock;
+                $demo->price = $pro->price;
+                $demo->discount = $pro->discount;
+                $demo->desc = $pro->desc;
+                $demo->unity = $pro->unity;
+                $product->push($demo);
+            }
+        }
         return ProductResource::collection($product);
     }
 
