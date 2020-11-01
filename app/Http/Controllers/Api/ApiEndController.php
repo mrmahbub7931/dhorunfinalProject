@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Cart;
 use App\Category;
 use App\CategoryProduct;
 use App\Demo;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ChildCategoryResource;
 use App\Http\Resources\ProductResource;
@@ -86,6 +88,52 @@ class ApiEndController extends Controller
             }
         }
         return ProductResource::collection($product);
+    }
+
+
+    public function cart_product($carts)
+    {
+//        return $carts;
+        $carts_decode = json_decode($carts);
+
+        $carts_list = collect();
+        foreach ($carts_decode as $cart) {
+            $explode_cart = explode("-", $cart);
+            $demo_cart = new Demo();
+            $demo_cart->productStockId = (int)$explode_cart[0];
+            $demo_cart->campaignId = (int)$explode_cart[1];
+            $demo_cart->quantity = (int)$explode_cart[2];
+            $carts_list->push($demo_cart);
+        }
+
+//        return $carts_list;
+
+        //modifying cart items to show
+        $cart_list = collect();
+        $cartProduct = new Demo();
+        $t_price = 0;
+
+        foreach ($carts_list as $cart) {
+            $product = Product::where('id',$cart->productStockId)->first();
+            if ($product != null){
+                $demo_cart = new Demo();
+                $demo_cart->id = $product->id;
+                $demo_cart->image  = $product->featured_image;
+                $demo_cart->name  = $product->name;
+                $demo_cart->price  = $product->discount == null ? $product->price : round((1 - ($product->discount/100)) * $product->price);
+                $demo_cart->quantity  =$cart->quantity;
+                $demo_cart->subPrice  =($demo_cart->price *$cart->quantity);
+                $t_price += $demo_cart->subPrice;
+                $cart_list->push($demo_cart);
+            }
+
+        }
+        $cartProduct->cart_product = $cart_list;
+        $cartProduct->total_price = $t_price;
+        $cartProduct->total_price_format = number_format($t_price,2);
+
+        return new CartResource($cartProduct);
+
     }
 
     /**

@@ -33,6 +33,8 @@ Route::get('search/product/{name}','Api\ApiEndController@searchProduct');
 /*wishlist*/
 Route::post('wishlist','Api\ApiEndController@wishlist');
 
+//carts
+Route::get('shop/carts/{carts}', 'Api\ApiEndController@cart_product');
 Route::get('category/product','Api\ApiEndController@singleCategoryProduct');
 
 /*registration customer*/

@@ -20,10 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5282a9fb-5054-4706-a938-0789ecc058d3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ApiEndController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ApiEndController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Kernel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Kernel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Resources/ProductResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/ProductResource.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
@@ -82,7 +80,8 @@
       <workItem from="1603984022078" duration="3545000" />
       <workItem from="1604023239394" duration="3650000" />
       <workItem from="1604068659193" duration="2204000" />
-      <workItem from="1604148009555" duration="598000" />
+      <workItem from="1604148009555" duration="1227000" />
+      <workItem from="1604240872525" duration="4604000" />
     </task>
     <servers />
   </component>
@@ -102,17 +101,17 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="1380" y="279" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1604071397924">
+    <state x="1380" y="279" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1604241322885">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="1380" y="279" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604071397924" />
-    <state x="790" y="373" key="FileChooserDialogImpl" timestamp="1604071341492">
+    <state x="1380" y="279" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604241322885" />
+    <state x="790" y="373" key="FileChooserDialogImpl" timestamp="1604241236772">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="790" y="373" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1604071341492" />
-    <state x="710" y="213" width="585" height="592" key="find.popup" timestamp="1603985854391">
+    <state x="790" y="373" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1604241236772" />
+    <state x="710" y="213" width="585" height="592" key="find.popup" timestamp="1604242929514">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="710" y="213" width="585" height="592" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603985854391" />
+    <state x="710" y="213" width="585" height="592" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604242929514" />
   </component>
 </project>
