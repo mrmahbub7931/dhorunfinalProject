@@ -38,9 +38,6 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        if (Gate::allows('isUser')) {
-            $this->redirectTo = route('frontend.user.account');
-        }
         $this->middleware('guest')->except('logout');
     }
 }

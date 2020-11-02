@@ -72,7 +72,7 @@
              <!--coupon code area start-->
             <div class="coupon_area">
                 <div class="row">
-                    <div class="col-lg-6 col-md-6">
+                    {{-- <div class="col-lg-6 col-md-6">
                         <div class="coupon_code left">
                             <h3>Coupon</h3>
                             <div class="coupon_inner">   
@@ -81,14 +81,14 @@
                                 <button type="submit">Apply coupon</button>
                             </div>    
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-lg-6 col-md-6">
                         <div class="coupon_code right">
                             <h3>Cart Totals</h3>
                             <div class="coupon_inner">
                                <div class="cart_subtotal">
                                    <p>Subtotal</p>
-                                   <p class="cart_amount">&#2547; {{ $totalPrice }}</p>
+                                   <p class="cart_amount">&#2547; {{ isset($totalPrice) ? $totalPrice : '' }}</p>
                                </div>
                                {{-- <div class="cart_subtotal ">
                                    <p>Shipping</p>
@@ -101,7 +101,7 @@
                                    <p class="cart_amount">&#2547; {{ $totalPrice }}</p>
                                </div> --}}
                                <div class="checkout_btn">
-                                   <a href="#">Proceed to Checkout</a>
+                                   <a href="{{route('frontend.checkout')}}">Proceed to Checkout</a>
                                </div>
                             </div>
                         </div>

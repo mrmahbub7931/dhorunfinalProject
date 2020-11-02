@@ -1,6 +1,6 @@
 @extends('layouts.front-end.app')
 
-@section('title','Login')
+@section('title','User Account')
 
 @push('css')
     
@@ -42,7 +42,6 @@
                                 <ul role="tablist" class="nav flex-column dashboard-list">
                                     <li><a href="#dashboard" data-toggle="tab" class="nav-link active">Dashboard</a></li>
                                     <li> <a href="#orders" data-toggle="tab" class="nav-link">Orders</a></li>
-                                    <li><a href="#downloads" data-toggle="tab" class="nav-link">Downloads</a></li>
                                     <li><a href="#address" data-toggle="tab" class="nav-link">Addresses</a></li>
                                     <li><a href="#account-details" data-toggle="tab" class="nav-link">Account details</a></li>
                                     {{-- <li><a href="login.html" class="nav-link">logout</a></li> --}}
@@ -60,7 +59,7 @@
                             <div class="tab-content dashboard_content">
                                 <div class="tab-pane fade show active" id="dashboard">
                                     <h3>Dashboard </h3>
-                                    <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">Edit your password and account details.</a></p>
+                                    <p>From your account dashboard. you can easily check &amp; view your <a href="javascript:void(0)">recent orders</a>, manage your <a href="javascript:void(0)">shipping and billing addresses</a> and <a href="javascript:void(0)">Edit your password and account details.</a></p>
                                 </div>
                                 <div class="tab-pane fade" id="orders">
                                     <h3>Orders</h3>
@@ -68,7 +67,8 @@
                                         <table class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Order</th>
+                                                    <th>Order ID</th>
+                                                    <th>Order Product</th>
                                                     <th>Date</th>
                                                     <th>Status</th>
                                                     <th>Total</th>
@@ -76,53 +76,37 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                
+                                                @foreach ($order_products as $products)
+                                                    
+                                                    {{-- @foreach ($products->order_products as $product)
+                                                            {{ $product->product_name }}
+                                                        @endforeach --}}
+                                                
                                                 <tr>
-                                                    <td>1</td>
-                                                    <td>May 10, 2018</td>
-                                                    <td><span class="success">Completed</span></td>
-                                                    <td>$25.00 for 1 item </td>
-                                                    <td><a href="cart.html" class="view">view</a></td>
+                                                    <td>{{$products->id}}</td>
+                                                    <td>
+                                                        @php
+                                                            $productName = [];
+                                                        @endphp
+                                                        @foreach ($products->order_products as $product)
+                                                            @php
+                                                                $productName[] = $product->product_name;
+                                                                echo implode(' &#9830;&#9830; ',$productName);
+                                                            @endphp
+                                                        @endforeach
+                                                    </td>
+                                                    <td>{{ date('F d, Y', strtotime($products->created_at)) }}</td>
+                                                    <td><span class="success">{{$products->order_status}}</span></td>
+                                                    <td>&#2547; {{ $products->order_total }} for {{count($products->order_products)}} item </td>
+                                                    <td><a href="javascript:void(0)" class="view">view</a></td>
                                                 </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>May 10, 2018</td>
-                                                    <td>Processing</td>
-                                                    <td>$17.00 for 1 item </td>
-                                                    <td><a href="cart.html" class="view">view</a></td>
-                                                </tr>
+                                                @endforeach
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="downloads">
-                                    <h3>Downloads</h3>
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Product</th>
-                                                    <th>Downloads</th>
-                                                    <th>Expires</th>
-                                                    <th>Download</th>	 	 	 	
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Shopnovilla - Free Real Estate PSD Template</td>
-                                                    <td>May 10, 2018</td>
-                                                    <td><span class="danger">Expired</span></td>
-                                                    <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Organic - ecommerce html template</td>
-                                                    <td>Sep 11, 2018</td>
-                                                    <td>Never</td>
-                                                    <td><a href="#" class="view">Click Here To Download Your File</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                
                                 <div class="tab-pane" id="address">
                                    <p>The following addresses will be used on the checkout page by default.</p>
                                     <h4 class="billing-address">Billing address</h4>

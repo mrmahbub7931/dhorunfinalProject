@@ -19,19 +19,13 @@ class Cart
 
     public function add($item,$slug)
     {
-        $storedItem = ['qty' => 0,'price' => $item['sales_price'],'slug' => $item['slug'], 'item' => $item];
+        $storedItem = ['qty' => 0,'price' => $item['sales_price'],'slug' => $item['slug'],'code' => $item['product_code'], 'item' => $item];
         if ($this->items) {
             if (array_key_exists($slug,$this->items)) {
                 $storedItem = $this->items[$slug];
             }
         }
-
-        // $storedItem['qty'] += $item['quantity'];
-        // $storedItem['price']  =  $item['sales_price'] * $storedItem['qty'];
-        // $this->items[$slug] = $storedItem;
-        // $this->totalQty += $item['quantity'];
-        // $this->totalPrice += $storedItem['price'];
-        // dd($this->items);
+        
         $storedItem['qty']++;
         $storedItem['price']  =  $item['sales_price'] * $storedItem['qty'];
         $this->items[$slug] = $storedItem;

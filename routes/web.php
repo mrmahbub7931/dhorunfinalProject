@@ -27,6 +27,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group([ 'as' => 'admin.','middleware' => ['auth'] ],function (){
     Route::group(['namespace' => 'Admin'], function () {
         Route::get('dashboard','DashboardController@index')->name('dashboard');
+        Route::get('orders','DashboardController@getOrders')->name('orders');
+        Route::get('customers','DashboardController@getCustomers')->name('customers');
         Route::get('category', 'CategoryController@index')->name('category.index');
         Route::get('category/create', 'CategoryController@create')->name('category.create');
         Route::post('category', 'CategoryController@store')->name('category.store');
@@ -52,6 +54,10 @@ Route::group(['namespace' => 'Admin'], function () {
 
  Route::group(['as' => 'frontend.','namespace' => 'frontend'], function () {
      Route::get('/', 'IndexController@index')->name('index');
+     Route::match(['get', 'post'], '/checkout', 'IndexController@checkout')->name('checkout');
+     Route::match(['get', 'post'], '/order-review', 'IndexController@orderReview')->name('order.review');
+     Route::match(['get', 'post'], '/place-order', 'IndexController@placeOrder')->name('order.place');
+     Route::get('/thanks-for-purchase', 'IndexController@thanks')->name('order.thanks');
      Route::get('/cart', 'ProductController@cartPage')->name('cart.index');
      Route::get('/{slug}', 'ProductController@products')->name('product-details');
      Route::post('add-to-cart/{product}','ProductController@getAddToCart')->name('product.addToCart');
@@ -64,4 +70,3 @@ Route::group(['namespace' => 'Admin'], function () {
      Route::get('user/logout','UserLoginController@userAccount')->name('user.logout');
      Route::put('user/account/{id}','UserLoginController@userDetails')->name('user.details');
  });
-

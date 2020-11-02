@@ -26,6 +26,7 @@ class ProductController extends Controller
     {
         $oldCart = $request->session()->has('cart') ? $request->session()->get('cart') : null;
         $cart = new Cart($oldCart);
+
         $cart->add($request->all(),$request->slug);
         $request->session()->put('cart', $cart);
         return redirect()->back();
