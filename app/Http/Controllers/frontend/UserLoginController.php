@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\frontend;
 
 use App\User;
+use App\Order;
 use App\Category;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -27,8 +28,11 @@ class UserLoginController extends Controller
     public function userAccount()
     {
         $categories = Category::all();
+        $user_id = Auth::user()->id;
+        $order_products = Order::with('order_products')->where('user_id',$user_id)->get();
+        // dd($order_products);
         if (Gate::allows('isUser')) {
-            return view('front-end.account',compact('categories'));
+            return view('front-end.account',compact('categories','order_products'));
         } else {
             return redirect()->route('frontend.user.login')->with('categories',$categories);
     

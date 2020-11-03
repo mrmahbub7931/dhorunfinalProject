@@ -313,10 +313,14 @@
                                 <div class="header_account-list top_links">
                                    <a href="#"><i class="icon-users"></i></a>
                                     <ul class="dropdown_links">
-                                        <li><a href="checkout.html">Checkout </a></li>
-                                        <li><a href="my-account.html">My Account </a></li>
-                                        <li><a href="cart.html">Shopping Cart</a></li>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
+                                        <li><a href="{{route('frontend.user.account')}}">My Account </a></li>
+                                        <li><a href="{{route('frontend.cart.index')}}">Shopping Cart</a></li>
+                                        <li><a href="#">Wishlist</a></li>
+                                        <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                            document.getElementById('logout-form').submit();">Logout</a></li>
+                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
                                     </ul>
                                 </div>
                                 <div class="header_account-list header_wishlist">
@@ -355,10 +359,10 @@
                                                     <span>Sub total:</span>
                                                     <span class="price">&#2547; {{$carts->totalPrice}}</span>
                                                 </div>
-                                                <div class="cart_total mt-10">
+                                                {{-- <div class="cart_total mt-10">
                                                     <span>total:</span>
                                                     <span class="price">&#2547; {{$carts->totalPrice}}</span>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                         <div class="mini_cart_footer">
@@ -366,7 +370,7 @@
                                                 <a href="{{url('/cart')}}"><i class="fa fa-shopping-cart"></i> View cart</a>
                                             </div>
                                             <div class="cart_button">
-                                                <a href="checkout.html"><i class="fa fa-sign-in"></i> Checkout</a>
+                                                <a href="{{route('frontend.checkout')}}"><i class="fa fa-sign-in"></i> Checkout</a>
                                             </div>
 
                                         </div>

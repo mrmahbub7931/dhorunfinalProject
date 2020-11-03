@@ -67,7 +67,12 @@
                         <li><a href="#"><i data-feather="mail"></i>Inbox</a></li>
                         <li><a href="#"><i data-feather="lock"></i>Lock Screen</a></li>
                         <li><a href="#"><i data-feather="settings"></i>Settings</a></li>
-                        <li><a href="#"><i data-feather="log-out"></i>Logout</a></li>
+                        <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();"><i data-feather="log-out"></i>Logout</a>
+                        </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
                     </ul>
                 </li>
             </ul>

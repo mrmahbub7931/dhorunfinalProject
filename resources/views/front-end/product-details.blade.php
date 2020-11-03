@@ -4,7 +4,7 @@
 
 @section('content')
     <!--product details start-->
-    {{-- {{ dd($product->id) }} --}}
+    {{-- {{ dd($product) }} --}}
     <div class="product_details mt-100 mb-100">
         <div class="container">
             <div class="row">
@@ -102,6 +102,7 @@
                                 <input type="hidden" name="image_src" value="{{$product->featured_image}}">
                                 <input type="hidden" name="product_name" value="{{$product->name}}">
                                 <input type="hidden" name="slug" value="{{$product->slug}}">
+                                <input type="hidden" name="product_code" value="{{$product['sku']}}">
                                 @if($product->discount !== NULL) 
                                 <input type="hidden" name="sales_price" value="{{round((1 - ($product->discount/100)) * $product->price)}}">
                                 @else 

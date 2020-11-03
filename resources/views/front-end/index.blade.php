@@ -182,6 +182,7 @@
                                                     <input type="hidden" name="image_src" value="{{$product['featured_image']}}">
                                                     <input type="hidden" name="product_name" value="{{$product['name']}}">
                                                     <input type="hidden" name="slug" value="{{$product['slug']}}">
+                                                    <input type="hidden" name="product_code" value="{{$product['sku']}}">
                                                     @if($product['discount'] !== NULL) 
                                                     <input type="hidden" name="sales_price" value="{{round((1 - ($product['discount']/100)) * $product['price'])}}">
                                                     @else
@@ -1470,10 +1471,11 @@
                                             @csrf
                                             <input type="hidden" name="id" value="{{$product['id']}}">
                                             <input type="hidden" name="image_src" value="{{$product['featured_image']}}">
-                                            <input type="hidden" name="product_name" value="{{$product['productName']}}">
+                                            <input type="hidden" name="product_name" value="{{$product['name']}}">
                                             <input type="hidden" name="slug" value="{{$product['slug']}}">
-                                            <input type="hidden" name="sales_price" value="{{$product['sales_price']}}">
-                                            <input min="1" max="100" placeholder="1" type="number" name="quantity">
+                                            <input type="hidden" name="product_code" value="{{$product['sku']}}">
+                                            <input type="hidden" name="sales_price" value="{{$product['price']}}">
+                                            <input min="1" max="100" type="number" name="quantity">
                                             <button type="submit">add to cart</button>
                                         </form>
                                     </div>   
