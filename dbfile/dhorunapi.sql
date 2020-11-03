@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 27, 2020 at 04:50 PM
+-- Generation Time: Nov 03, 2020 at 03:15 PM
 -- Server version: 10.1.36-MariaDB
 -- PHP Version: 7.2.11
 
@@ -164,7 +164,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (13, '2020_09_02_181417_create_category_product_table', 1),
 (14, '2020_09_30_160204_add_unity_to_products_table', 1),
 (15, '2020_10_07_175021_create_carts_table', 1),
-(16, '2020_10_24_133457_create_sliders_table', 1);
+(16, '2020_10_24_133457_create_sliders_table', 1),
+(17, '2020_10_30_165502_create_order_areas_table', 2),
+(18, '2020_11_01_165523_create_shipping_addresses_table', 3),
+(19, '2020_11_02_100723_add_flat_rate_column_to_shipping_addresses_table', 4),
+(20, '2020_11_02_164554_create_orders_table', 5),
+(21, '2020_11_02_181633_create_order_product_table', 5),
+(22, '2020_11_02_183844_add_order_total_to_orders_table', 6);
 
 -- --------------------------------------------------------
 
@@ -286,6 +292,94 @@ INSERT INTO `oauth_refresh_tokens` (`id`, `access_token_id`, `revoked`, `expires
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` int(11) NOT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_area` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `shipping_charge` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `coupon_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `coupon_amount` int(11) DEFAULT NULL,
+  `order_status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'processing',
+  `payment_method` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `order_total` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `user_name`, `phone_number`, `address`, `customer_area`, `shipping_charge`, `coupon_code`, `coupon_amount`, `order_status`, `payment_method`, `created_at`, `updated_at`, `order_total`) VALUES
+(1, 3, 'Emdadul Rayhan', 1813883707, '13/3 Ka, Level 8, Bashundhara City, Panthapath, Dhaka 1205', 'Feni', '30', NULL, NULL, 'processing', 'cash_on_delivery', '2020-11-02 14:05:17', '2020-11-02 14:05:17', '723'),
+(2, 3, 'Emdadul Rayhan', 1813883707, '13/3 Ka, Level 8, Bashundhara City, Panthapath, Dhaka 1205', 'Feni', '30', NULL, NULL, 'processing', 'cash_on_delivery', '2020-11-02 14:14:47', '2020-11-02 14:14:47', '410'),
+(3, 4, 'Fazle Rabbi', 1840241892, 'Tower (6th Floor), House, Shonim, 55 Shah Makhdum Ave, Dhaka 1230', 'Dhaka', '50', NULL, NULL, 'processing', 'cash_on_delivery', '2020-11-02 15:31:17', '2020-11-02 15:31:17', '225');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_areas`
+--
+
+CREATE TABLE `order_areas` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_area` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `flat_rate` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_areas`
+--
+
+INSERT INTO `order_areas` (`id`, `order_area`, `flat_rate`, `created_at`, `updated_at`) VALUES
+(4, 'Feni', '30', '2020-10-30 12:54:52', '2020-10-30 12:54:52'),
+(5, 'Dhaka', '50', '2020-10-30 13:08:56', '2020-10-30 13:08:56'),
+(6, 'Chittagong', '40', '2020-10-30 13:09:06', '2020-10-30 13:09:06'),
+(7, 'Chouddogram', '60', '2020-10-30 13:09:20', '2020-10-30 13:09:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_product`
+--
+
+CREATE TABLE `order_product` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_code` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_size` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_color` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `product_price` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `product_qty` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_product`
+--
+
+INSERT INTO `order_product` (`id`, `order_id`, `user_id`, `product_slug`, `product_code`, `product_name`, `product_size`, `product_color`, `product_price`, `product_qty`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 'molfix-baby-diaper-belt-1-new-born-2-5-kg', 'DD1', 'Molfix Baby Diaper Belt 1 New Born 2-5 kg', NULL, NULL, '693', '1', '2020-11-02 14:05:17', '2020-11-02 14:05:17'),
+(2, 2, 3, 'johnson-s-extra-sensitive-baby-wipes', 'DBW1', 'Johnson\'s Extra Sensitive Baby Wipes', NULL, NULL, '325', '1', '2020-11-02 14:14:47', '2020-11-02 14:14:47'),
+(3, 2, 3, 'red-tomato-net-weight-±-10-gm', 'DT10GM', 'Red Tomato (Net Weight ± 10 gm)', NULL, NULL, '55', '1', '2020-11-02 14:14:47', '2020-11-02 14:14:47'),
+(4, 3, 4, 'special-brown-bread', 'DBB1', 'Special Brown Bread', NULL, NULL, '105', '1', '2020-11-02 15:31:17', '2020-11-02 15:31:17'),
+(5, 3, 4, 'coca-cola', 'DCC1', 'Coca-Cola', NULL, NULL, '70', '1', '2020-11-02 15:31:17', '2020-11-02 15:31:17');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `password_resets`
 --
 
@@ -377,6 +471,32 @@ CREATE TABLE `roles` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `shipping_addresses`
+--
+
+CREATE TABLE `shipping_addresses` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone_number` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_area` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `flat_rate` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `shipping_addresses`
+--
+
+INSERT INTO `shipping_addresses` (`id`, `user_id`, `user_name`, `phone_number`, `address`, `customer_area`, `created_at`, `updated_at`, `flat_rate`) VALUES
+(1, '3', 'Emdadul Rayhan', '01813883707', '13/3 Ka, Level 8, Bashundhara City, Panthapath, Dhaka 1205', 'Feni', '2020-11-02 04:30:38', '2020-11-02 14:12:42', '30'),
+(2, '4', 'Fazle Rabbi', '01840241892', 'Tower (6th Floor), House, Shonim, 55 Shah Makhdum Ave, Dhaka 1230', 'Dhaka', '2020-11-02 12:03:27', '2020-11-02 15:30:58', '50');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sliders`
 --
 
@@ -414,7 +534,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `role`, `address`, `name`, `avatar`, `phone_number`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', NULL, 'Mahbubar Rahman', 'avatar.png', '01629733236', '$2y$10$jO1h1dbaKqzYWj7sTjUShuRDDtVQbS4/QN17s4OzeFGDPJWho7Iyi', NULL, '2020-10-25 09:44:17', '2020-10-25 09:44:17');
+(1, 'admin', NULL, 'Mahbubar Rahman', 'avatar.png', '01629733236', '$2y$10$jO1h1dbaKqzYWj7sTjUShuRDDtVQbS4/QN17s4OzeFGDPJWho7Iyi', NULL, '2020-10-25 09:44:17', '2020-10-25 09:44:17'),
+(3, 'customer', '13/3 Ka, Level 8, Bashundhara City, Panthapath, Dhaka 1205', 'Emdadul Rayhan', 'avatar.png', '01813883707', '$2y$10$o5RBj/KRZlWx6tbJDNFBs.eaOdtFoLPp/s5lEvIkWqg8z1TaJj62u', NULL, '2020-10-28 12:23:17', '2020-11-02 14:12:42'),
+(4, 'customer', 'Tower (6th Floor), House, Shonim, 55 Shah Makhdum Ave, Dhaka 1230', 'Fazle Rabbi', 'avatar.png', '01840241892', '$2y$10$cOWXUbI2OG1wixS1kAKgDeDVO2OY4AkhYK4MH1ROsI9JXIDe343iu', NULL, '2020-10-28 12:28:02', '2020-11-02 15:30:57');
 
 --
 -- Indexes for dumped tables
@@ -487,6 +609,24 @@ ALTER TABLE `oauth_refresh_tokens`
   ADD KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`);
 
 --
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `order_areas`
+--
+ALTER TABLE `order_areas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `order_product`
+--
+ALTER TABLE `order_product`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -509,6 +649,12 @@ ALTER TABLE `reviews`
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `shipping_addresses`
+--
+ALTER TABLE `shipping_addresses`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -555,7 +701,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `oauth_clients`
@@ -568,6 +714,24 @@ ALTER TABLE `oauth_clients`
 --
 ALTER TABLE `oauth_personal_access_clients`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `order_areas`
+--
+ALTER TABLE `order_areas`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `order_product`
+--
+ALTER TABLE `order_product`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -588,6 +752,12 @@ ALTER TABLE `roles`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `shipping_addresses`
+--
+ALTER TABLE `shipping_addresses`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `sliders`
 --
 ALTER TABLE `sliders`
@@ -597,7 +767,7 @@ ALTER TABLE `sliders`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
