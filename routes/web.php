@@ -30,10 +30,11 @@ Route::group([ 'as' => 'admin.','middleware' => ['auth'] ],function (){
         Route::get('orders','DashboardController@getOrders')->name('orders');
         Route::get('customers','DashboardController@getCustomers')->name('customers');
         Route::get('category', 'CategoryController@index')->name('category.index');
-        Route::get('category/create', 'CategoryController@create')->name('category.create');
         Route::post('category', 'CategoryController@store')->name('category.store');
+        Route::get('category/create', 'CategoryController@create')->name('category.create');
         Route::get('category/edit/{id}', 'CategoryController@edit')->name('category.edit');
         Route::put('category/update/{id}', 'CategoryController@update')->name('category.update');
+        Route::DELETE('category/delete/{id}', 'CategoryController@destroy')->name('category.delete');
         Route::resources([
             'products' => 'ProductController',
             'orderarea' => 'OrderAreaController'
