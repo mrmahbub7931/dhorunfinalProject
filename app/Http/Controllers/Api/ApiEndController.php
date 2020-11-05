@@ -7,17 +7,24 @@ use App\Category;
 use App\CategoryProduct;
 use App\Demo;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AreaResource;
 use App\Http\Resources\CartResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\ChildCategoryResource;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\SliderResource;
+use App\Order;
+use App\OrderArea;
+use App\OrderProducts;
 use App\Product;
 use App\Slider;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Mockery\Exception;
 
 class ApiEndController extends Controller
 {
@@ -91,6 +98,7 @@ class ApiEndController extends Controller
     }
 
 
+    /*cart calculations*/
     public function cart_product($carts)
     {
 //        return $carts;
@@ -136,6 +144,113 @@ class ApiEndController extends Controller
 
     }
 
+    /*deliver are*/
+    public function area(){
+        $area  = OrderArea::all();
+        return AreaResource::collection($area);
+    }
+
+    public function checkout(Request $request){
+//         return $request;
+
+        $user = Auth::user();
+        $demo = new Demo();
+        $total = 0;
+        try {
+
+            $carts_decode = json_decode($request->carts);
+            $carts_list = collect();
+            foreach ($carts_decode as $cart) {
+                $explode_cart = explode("-", $cart);
+                $demo_cart = new Demo();
+                $demo_cart->id = $explode_cart[0];
+                $demo_cart->quantity = $explode_cart[1];
+                $demo_cart->subPrice = $explode_cart[2];
+                $total +=$demo_cart->subPrice;
+                $carts_list->push($demo_cart);
+            }
+
+            /*order create*/
+            $order = new Order();
+            $order->user_id =  $user->id;
+            $order->user_name = $user->name;
+            $order->phone_number = $request->phone;
+            $order->address = $request->address;
+            $order->customer_area = $request->area_name;
+            $order->shipping_charge = $request->area_charge;
+            $order->payment_method = 'Cash on Delivery';
+            $order->order_total = $total;
+            $order->save();
+            /*save the order*/
+
+            /*save the product*/
+            foreach ($carts_list as  $cart) {
+                $product = Product::where('id',$cart->id)->first();
+                $orderProduct = new OrderProducts;
+                $orderProduct->order_id = $order->id;
+                $orderProduct->user_id = $user->id;
+                $orderProduct->product_slug = $product->slug;
+                $orderProduct->product_code = null;
+                $orderProduct->product_name = $product->name;
+                $orderProduct->product_price = $cart->subPrice;
+                $orderProduct->product_qty = $cart->quantity;
+                $orderProduct->save();
+            }
+
+            $demo->error = false;
+            $demo->message = "Dear " . Auth::user()->name .
+                " Thank you for your purchase.Your order has been successfully placed";
+        }catch (Exception $exception){
+            $demo->error = true;
+            $demo->message = "We are facing some server problem, Try again ";
+        }
+
+        return  $demo;
+
+        if ($request->isMethod('post')) {
+            $data = [
+                'user_id'   =>  $request->user_id,
+                'user_name'   =>  $request->user_name,
+                'phone_number'   =>  $request->phone_number,
+                'address'   =>  $request->address,
+                'customer_area'   =>  $request->customer_area,
+                'shipping_charge'   =>  $request->shipping_charge,
+                'payment_method'   =>  $request->payment_method,
+                'order_total'   =>  $request->order_total,
+            ];
+
+            $order = Order::create($data);
+
+            $order_id = DB::getPdo()->lastInsertId();
+            if (Session::has('cart')) {
+                $oldCart = Session::get('cart');
+                $carts = new Cart($oldCart);
+                foreach ($carts->items as  $cart) {
+                    $orderProduct = new OrderProducts;
+                    $orderProduct->order_id = $order_id;
+                    $orderProduct->user_id = $request->user_id;
+                    $orderProduct->product_slug = $cart['slug'];
+                    $orderProduct->product_code = $cart['code'];
+                    $orderProduct->product_name = $cart['item']['product_name'];
+                    $orderProduct->product_price = $cart['item']['sales_price'];
+                    $orderProduct->product_qty = $cart['qty'];
+                    $orderProduct->save();
+                }
+                // dd($carts);
+                // return view('front-end.cart',['categories' => $categories,'products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
+            }
+            Session::forget('cart');
+            Session::put('order_id',$orderProduct->product_code);
+            Session::put('order_total',$order->order_total);
+            return redirect()->route('frontend.order.thanks')->with('success','Thanks for purchasing with us!');
+        }
+    }
+
+    /*userData*/
+    public function userData(){
+        $user= Auth::user();
+        return $user;
+    }
     /**
      * REGISTER
      */
@@ -143,29 +258,42 @@ class ApiEndController extends Controller
     public function register(Request $request)
     {
 //        return $request;
-
-        $userhave = User::where('phone_number', $request->number)->first();
-//        return $userhave;
         $demo = new Demo();
-        if ($userhave != null) {
+        if ($request->name == null){
             $demo->error = true;
-            $demo->errorMessage = "Phone Number is All ready entry";
-        } else {
+            $demo->errorMessage = "Name Is Required";
+        }elseif ($request->number == null){
+            $demo->error = true;
+            $demo->errorMessage = "Phone Number is Required";
+        }elseif ($request->password == null){
+            $demo->error = true;
+            $demo->errorMessage = "Password is  Required";
+        }elseif($request->address == null){
+            $demo->error = true;
+            $demo->errorMessage = "Address is Required";
+        }else{
+            $userhave = User::where('phone_number', $request->number)->first();
 
-            $user = new User();
-//            $user->user_type = "Customer";
-            $user->name = $request->name;
-            $user->phone_number = $request->number;
-            $user->password = Hash::make($request->password);
-            $user->save();
+            if ($userhave != null) {
+                $demo->error = true;
+                $demo->errorMessage = "Phone Number is All ready entry";
+            } else {
 
-            /*append demo data*/
-            $demo->error = false;
-            $demo->name = $user->name;
-            $demo->number = $user->phone_number;
-            $demo->avatar = $user->avatar == null ? null : $user->avatar;
-            $token = $user->createToken(env('API_TOKEN'))->accessToken;
-            $demo->token = $token;
+                $user = new User();
+                $user->name = $request->name;
+                $user->phone_number = $request->number;
+                $user->address = $request->address;
+                $user->password = Hash::make($request->password);
+                $user->save();
+
+                /*append demo data*/
+                $demo->error = false;
+                $demo->name = $user->name;
+                $demo->number = $user->phone_number;
+                $demo->avatar = $user->avatar == null ? null : $user->avatar;
+                $token = $user->createToken(env('API_TOKEN'))->accessToken;
+                $demo->token = $token;
+            }
         }
         return $demo;
     }

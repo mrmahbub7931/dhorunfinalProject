@@ -37,6 +37,14 @@ Route::post('wishlist','Api\ApiEndController@wishlist');
 Route::get('shop/carts/{carts}', 'Api\ApiEndController@cart_product');
 Route::get('category/product','Api\ApiEndController@singleCategoryProduct');
 
+/*area */
+Route::get('area','Api\ApiEndController@area');
+Route::post('user/data','Api\ApiEndController@userData');
+
+
+/*checkout*/
+Route::post('checkout','Api\ApiEndController@checkout')->middleware('auth:api');
+
 /*registration customer*/
 Route::post('/register', 'Api\ApiEndController@register');
 /*login customer*/
